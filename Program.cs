@@ -26,8 +26,10 @@ app.UseSwaggerUI(c =>
 });
 
 // routes
+// get all pizzas
 app.MapGet("/pizzas", async (PizzaDB db) => await db.Pizzas.ToListAsync());
 
+// create a new pizza entry
 app.MapPost("/pizza", async (PizzaDB db, Pizza pizza) =>
 {
     await db.Pizzas.AddAsync(pizza);
@@ -36,6 +38,7 @@ app.MapPost("/pizza", async (PizzaDB db, Pizza pizza) =>
     return Results.Created($"/pizza/{pizza.Id}", pizza);
 });
 
+// get a pizza by id
 app.MapGet("/pizza/{id}", async (PizzaDB db, int id) => await db.Pizzas.FindAsync(id));
 
 app.Run();
