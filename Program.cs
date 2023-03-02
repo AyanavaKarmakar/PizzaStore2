@@ -1,8 +1,11 @@
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using PizzaStore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<PizzaDB>(options => options.UseInMemoryDatabase("items"));
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v2", new OpenApiInfo
@@ -22,6 +25,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v2/swagger.json", "PizzaStore API v2");
 });
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/pizzas", async (PizzaDB db) => await db.Pizzas.ToListAsync());
 
 app.Run();
